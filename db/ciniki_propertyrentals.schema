@@ -14,7 +14,8 @@
 #
 # status:			The current status of the property.
 #
-#					10 - Active
+#					10 - Available
+#					20 - Rented
 #					50 - Archived
 #					60 - Deleted
 #
@@ -39,6 +40,9 @@
 # synopsis:			The synopsis of the property.
 # description:		The description of the property.
 #
+# sqft:				The square footage of the propery.
+# owner:			The owner of the property.
+#
 # notes:			Internal notes about the property.
 #
 # date_added:		The UTC date and time the record was added.
@@ -62,6 +66,9 @@ create table ciniki_propertyrentals (
 	longitude decimal(18,12) not null,
 	synopsis varchar(6000) not null,
 	description varchar(20000) not null,
+	sqft int not null,
+	ammenities varchar(5000) not null,
+	owner varchar(250) not null,
 	notes varchar(10000) not null,
 	date_added datetime not null,
 	last_updated datetime not null,

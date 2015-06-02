@@ -20,8 +20,7 @@ function ciniki_propertyrentals_maps($ciniki, $modules) {
 			'60'=>'Deleted',
 			),
 		'flags'=>array(
-			0x01=>'Public',
-			0x02=>'Private',
+			0x01=>'Visible',
 			),
 		);
 
