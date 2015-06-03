@@ -15,7 +15,7 @@ function ciniki_propertyrentals_web_properties($ciniki, $settings, $business_id,
 		. "ciniki_propertyrentals.title, "
 		. "ciniki_propertyrentals.permalink, "
 		. "ciniki_propertyrentals.synopsis, "
-		. "IF(ciniki_propertyrentals.description='', 'no', 'yes') AS isdetails, "
+		. "'yes' AS is_details, "
 		. "ciniki_propertyrentals.primary_image_id "
 		. "";
 	if( isset($args['tag_type']) && $args['tag_type'] != '' 
@@ -47,7 +47,7 @@ function ciniki_propertyrentals_web_properties($ciniki, $settings, $business_id,
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.propertyrentals', array(
 		array('container'=>'list', 'fname'=>'id', 
-			'fields'=>array('id', 'title', 'image_id'=>'primary_image_id', 'isdetails', 'description'=>'synopsis')),
+			'fields'=>array('id', 'title', 'permalink', 'image_id'=>'primary_image_id', 'is_details', 'description'=>'synopsis')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
