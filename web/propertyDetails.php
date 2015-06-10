@@ -61,7 +61,7 @@ function ciniki_propertyrentals_web_propertyDetails($ciniki, $settings, $busines
 		return $rc;
 	}
 	if( !isset($rc['properties']) || count($rc['properties']) < 1 ) {
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'1762', 'msg'=>"I'm sorry, but we can't find the property you requested."));
+		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2431', 'msg'=>"I'm sorry, but we can't find the property you requested."));
 	}
 	$property = array_pop($rc['properties']);
 
