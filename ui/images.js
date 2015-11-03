@@ -16,7 +16,7 @@ function ciniki_propertyrentals_images() {
 		this.edit.data = {};
 		this.edit.property_id = 0;
 		this.edit.sections = {
-			'_image':{'label':'Image', 'fields':{
+			'_image':{'label':'Image', 'type':'imageform', 'fields':{
 				'image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'controls':'all', 'history':'no'},
 				}},
 			'info':{'label':'Information', 'type':'simpleform', 'fields':{
