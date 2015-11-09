@@ -118,8 +118,8 @@ function ciniki_propertyrentals_main() {
 			return 'M.startApp(\'ciniki.propertyrentals.images\',null,\'M.ciniki_propertyrentals_main.showProperty();\',\'mc\',{\'property_image_id\':\'' + d.image.id + '\'});';
 		};
 		this.property.addButton('edit', 'Edit', 'M.ciniki_propertyrentals_main.propertyEdit(\'M.ciniki_propertyrentals_main.showProperty();\',M.ciniki_propertyrentals_main.property.property_id);');
-		this.property.addLeftButton('website', 'Preview', 'M.showWebsite(\'/properties/\'+M.ciniki_propertyrentals_main.property.data.permalink);');
 		this.property.addClose('Back');
+		this.property.addLeftButton('website', 'Preview', 'M.showWebsite(\'/properties/\'+M.ciniki_propertyrentals_main.property.data.permalink);');
 
 		//
 		// The panel for a site's menu
