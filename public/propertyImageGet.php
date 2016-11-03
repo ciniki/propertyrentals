@@ -63,7 +63,7 @@ function ciniki_propertyrentals_propertyImageGet($ciniki) {
         return $rc;
     }
     if( !isset($rc['images']) ) {
-        return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'2397', 'msg'=>'Unable to find image'));
+        return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.propertyrentals.13', 'msg'=>'Unable to find image'));
     }
     $image = $rc['images'][0]['image'];
     

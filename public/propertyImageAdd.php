@@ -45,7 +45,7 @@ function ciniki_propertyrentals_propertyImageAdd(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
     $rc = ciniki_core_dbUUID($ciniki, 'ciniki.propertyrentals');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2392', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.9', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
     }
     $args['uuid'] = $rc['uuid'];
 
@@ -74,12 +74,12 @@ function ciniki_propertyrentals_propertyImageAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2393', 'msg'=>'You already have an image with this name, please choose another name'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.10', 'msg'=>'You already have an image with this name, please choose another name'));
     }
 
 
     if( $args['property_id'] <= 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2394', 'msg'=>'No propertyrental specified'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.11', 'msg'=>'No propertyrental specified'));
     }
    
     //

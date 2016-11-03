@@ -52,7 +52,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['property']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2430', 'msg'=>'The property does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.5', 'msg'=>'The property does not exist'));
     }
     $property_uuid = $rc['property']['uuid'];
 

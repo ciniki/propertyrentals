@@ -46,7 +46,7 @@ function ciniki_propertyrentals_propertyImageDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2396', 'msg'=>'Property image does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.12', 'msg'=>'Property image does not exist'));
     }
     $item = $rc['item'];
 

@@ -150,7 +150,7 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
                 return $rc;
             }
             if( !isset($rc['propertyrentals']) || !isset($rc['propertyrentals'][0]) ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2426', 'msg'=>'Unable to find property'));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.6', 'msg'=>'Unable to find property'));
             }
             $property = $rc['propertyrentals'][0]['property'];
             ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
@@ -176,7 +176,7 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
                 return $rc;
             }
             if( !isset($rc['propertyrentals']) || !isset($rc['propertyrentals'][0]) ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2427', 'msg'=>'Unable to find property'));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.7', 'msg'=>'Unable to find property'));
             }
             $property = $rc['propertyrentals'][0]['property'];
         }
@@ -231,7 +231,7 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
         $rc = ciniki_core_tagsList($ciniki, 'ciniki.propertyrentals', $args['business_id'], 
             'ciniki_propertyrental_tags', 10);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2428', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.8', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
         }
         if( isset($rc['tags']) ) {
             $rsp['categories'] = $rc['tags'];

@@ -55,7 +55,7 @@ function ciniki_propertyrentals_propertyImageUpdate(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2395', 'msg'=>'Property image not found'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.14', 'msg'=>'Property image not found'));
     }
     $item = $rc['item'];
 
@@ -79,7 +79,7 @@ function ciniki_propertyrentals_propertyImageUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2398', 'msg'=>'You already have an image with this name, please choose another name'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.15', 'msg'=>'You already have an image with this name, please choose another name'));
         }
     }
 
