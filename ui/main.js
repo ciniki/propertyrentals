@@ -1,5 +1,5 @@
 //
-// This app will handle the listing, additions and deletions of properties.  These are associated business.
+// This app will handle the listing, additions and deletions of properties.  These are associated tenant.
 //
 function ciniki_propertyrentals_main() {
     //
@@ -81,7 +81,7 @@ function ciniki_propertyrentals_main() {
         };
         this.property.addDropImage = function(iid) {
             var rsp = M.api.getJSON('ciniki.propertyrentals.propertyImageAdd',
-                {'business_id':M.curBusinessID, 'image_id':iid, 'property_id':M.ciniki_propertyrentals_main.property.property_id});
+                {'tnid':M.curTenantID, 'image_id':iid, 'property_id':M.ciniki_propertyrentals_main.property.property_id});
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -90,7 +90,7 @@ function ciniki_propertyrentals_main() {
         };
         this.property.addDropImageRefresh = function() {
             if( M.ciniki_propertyrentals_main.property.property_id > 0 ) {
-                var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'business_id':M.curBusinessID, 
+                var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'tnid':M.curTenantID, 
                     'property_id':M.ciniki_propertyrentals_main.property.property_id, 'images':'yes'}, function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -173,7 +173,7 @@ function ciniki_propertyrentals_main() {
             };  
         this.edit.fieldValue = function(s, i, d) { return this.data[i]; }
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.propertyrentals.propertyHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.propertyrentals.propertyHistory', 'args':{'tnid':M.curTenantID, 
                 'property_id':this.property_id, 'field':i}};
         }
         this.edit.lookupLatLong = function() {
@@ -182,7 +182,7 @@ function ciniki_propertyrentals_main() {
                 var script = document.createElement("script");
                 script.id = 'googlemaps_js';
                 script.type = "text/javascript";
-                script.src = "https://maps.googleapis.com/maps/api/js?key=" + M.curBusiness.settings['googlemapsapikey'] + "&sensor=false&callback=M.ciniki_propertyrentals_main.edit.lookupGoogleLatLong";
+                script.src = "https://maps.googleapis.com/maps/api/js?key=" + M.curTenant.settings['googlemapsapikey'] + "&sensor=false&callback=M.ciniki_propertyrentals_main.edit.lookupGoogleLatLong";
                 document.body.appendChild(script);
             } else {
                 this.lookupGoogleLatLong();
@@ -233,8 +233,8 @@ function ciniki_propertyrentals_main() {
         } 
 
         // Categories enabled
-        if( M.curBusiness.modules['ciniki.propertyrentals'] != null 
-            && (M.curBusiness.modules['ciniki.propertyrentals'].flags&0x01) ) {
+        if( M.curTenant.modules['ciniki.propertyrentals'] != null 
+            && (M.curTenant.modules['ciniki.propertyrentals'].flags&0x01) ) {
             this.menu.size = 'medium narrowaside';
 //          this.menu.sections.categories.visible = 'yes';
             this.property.sections.info.list.categories_text.visible = 'yes';
@@ -263,7 +263,7 @@ function ciniki_propertyrentals_main() {
             this.menu.status = status;
             this.menu.sections.status.selected = status;
         }
-        M.api.getJSONCb('ciniki.propertyrentals.propertyList', {'business_id':M.curBusinessID, 'status':this.menu.status}, function(rsp) {
+        M.api.getJSONCb('ciniki.propertyrentals.propertyList', {'tnid':M.curTenantID, 'status':this.menu.status}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -278,7 +278,7 @@ function ciniki_propertyrentals_main() {
     this.showProperty = function(cb, eid) {
         this.property.reset();
         if( eid != null ) { this.property.property_id = eid; }
-        var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'business_id':M.curBusinessID, 
+        var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'tnid':M.curTenantID, 
             'property_id':this.property.property_id, 'images':'yes', 'categories':'yes'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
@@ -309,7 +309,7 @@ function ciniki_propertyrentals_main() {
 
         this.edit.sections._buttons.buttons.delete.visible = (this.edit.property_id>0?'yes':'no');
         this.edit.reset();
-        M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'business_id':M.curBusinessID, 
+        M.api.getJSONCb('ciniki.propertyrentals.propertyGet', {'tnid':M.curTenantID, 
             'property_id':this.edit.property_id, 'categories':'yes'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
@@ -333,7 +333,7 @@ function ciniki_propertyrentals_main() {
             var c = this.edit.serializeForm('no');
             if( c != '' ) {
                 M.api.postJSONCb('ciniki.propertyrentals.propertyUpdate', 
-                    {'business_id':M.curBusinessID, 'property_id':M.ciniki_propertyrentals_main.edit.property_id}, c,
+                    {'tnid':M.curTenantID, 'property_id':M.ciniki_propertyrentals_main.edit.property_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -348,7 +348,7 @@ function ciniki_propertyrentals_main() {
             var c = this.edit.serializeForm('yes');
             if( c != '' ) {
                 var rsp = M.api.postJSONCb('ciniki.propertyrentals.propertyAdd', 
-                    {'business_id':M.curBusinessID}, c, function(rsp) {
+                    {'tnid':M.curTenantID}, c, function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
                             return false;
@@ -370,7 +370,7 @@ function ciniki_propertyrentals_main() {
     this.removeProperty = function() {
         if( confirm("Are you sure you want to remove '" + this.property.data.name + "' as an property ?") ) {
             M.api.getJSONCb('ciniki.propertyrentals.propertyDelete', 
-                {'business_id':M.curBusinessID, 'property_id':M.ciniki_propertyrentals_main.property.property_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'property_id':M.ciniki_propertyrentals_main.property.property_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;

@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_propertyrentals_web_properties($ciniki, $settings, $business_id, $args) {
+function ciniki_propertyrentals_web_properties($ciniki, $settings, $tnid, $args) {
 
     $strsql = "SELECT ciniki_propertyrentals.id, "
         . "ciniki_propertyrentals.title, "
@@ -24,15 +24,15 @@ function ciniki_propertyrentals_web_properties($ciniki, $settings, $business_id,
         $strsql .= "FROM ciniki_propertyrental_tags "
             . "INNER JOIN ciniki_propertyrentals ON ("
                 . "ciniki_propertyrental_tags.propertyrental_id = ciniki_propertyrentals.id "
-                . "AND ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+                . "AND ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . ") "
-            . "WHERE ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND ciniki_propertyrental_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_propertyrental_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag_permalink']) . "' "
             . "";
     } else {
         $strsql .= "FROM ciniki_propertyrentals "
-            . "WHERE ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "";
     }
     $strsql .= "AND (ciniki_propertyrentals.flags&0x01) = 1 ";      // Visible on website

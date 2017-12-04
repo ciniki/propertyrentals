@@ -9,15 +9,15 @@
 // Returns
 // -------
 //
-function ciniki_propertyrentals_web_propertyDetails($ciniki, $settings, $business_id, $permalink) {
+function ciniki_propertyrentals_web_propertyDetails($ciniki, $settings, $tnid, $permalink) {
 
     
 //  print "<pre>" . print_r($ciniki, true) . "</pre>";
     //
     // Load INTL settings
     //
-/*  ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $business_id);
+/*  ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $tnid);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -44,7 +44,7 @@ function ciniki_propertyrentals_web_propertyDetails($ciniki, $settings, $busines
             . "AND ciniki_propertyrental_images.image_id > 0 "
             . "AND (ciniki_propertyrental_images.webflags&0x01) = 0 "
             . ") "
-        . "WHERE ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_propertyrentals.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
         . "AND (ciniki_propertyrentals.flags&0x01) = 1 "    // Visible on website
         . "";
@@ -70,7 +70,7 @@ function ciniki_propertyrentals_web_propertyDetails($ciniki, $settings, $busines
     //
 /*  $strsql = "SELECT id, name, extension, permalink, description "
         . "FROM ciniki_propertyrental_files "
-        . "WHERE ciniki_propertyrental_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_propertyrental_files.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_propertyrental_files.property_id = '" . ciniki_core_dbQuote($ciniki, $property['id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.propertyrentals', array(

@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will delete a property from the business.
+// This method will delete a property from the tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business the property is attached to.
+// tnid:         The ID of the tenant the property is attached to.
 // property_id:         The ID of the property to be removed.
 //
 // Returns
@@ -21,7 +21,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'property_id'=>array('required'=>'yes', 'default'=>'', 'blank'=>'yes', 'name'=>'Property'), 
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -30,10 +30,10 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     $args = $rc['args'];
     
     //
-    // Check access to business_id as owner
+    // Check access to tnid as owner
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'propertyrentals', 'private', 'checkAccess');
-    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['business_id'], 'ciniki.propertyrentals.propertyDelete');
+    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['tnid'], 'ciniki.propertyrentals.propertyDelete');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -43,7 +43,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     //
     $strsql = "SELECT uuid "
         . "FROM ciniki_propertyrentals "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['property_id']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
@@ -75,7 +75,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     //
     $strsql = "SELECT id, uuid, image_id "
         . "FROM ciniki_propertyrental_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND property_id = '" . ciniki_core_dbQuote($ciniki, $args['property_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.propertyrentals', 'image');
@@ -87,7 +87,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
         $images = $rc['rows'];
         
         foreach($images as $iid => $image) {
-            $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.propertyrentals.image', 
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.propertyrentals.image', 
                 $image['id'], $image['uuid'], 0x04);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.propertyrentals');
@@ -99,9 +99,9 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     //
     // Remove any tags
     //
-    if( ($ciniki['business']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0 ) {
+    if( ($ciniki['tenant']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0 ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsDelete');
-        $rc = ciniki_core_tagsDelete($ciniki, 'ciniki.propertyrentals', 'tag', $args['business_id'],
+        $rc = ciniki_core_tagsDelete($ciniki, 'ciniki.propertyrentals', 'tag', $args['tnid'],
             'ciniki_propertyrental_tags', 'ciniki_propertyrental_history', 'property_id', $args['property_id']);
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'ciniki.propertyrentals');
@@ -112,7 +112,7 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     //
     // Remove the property
     //
-    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.propertyrentals.property', 
+    $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.propertyrentals.property', 
         $args['property_id'], $property_uuid, 0x04);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.propertyrentals');
@@ -128,11 +128,11 @@ function ciniki_propertyrentals_propertyDelete(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'propertyrentals');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'propertyrentals');
 
     return array('stat'=>'ok');
 }

@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business the property is attached to.
+// tnid:     The ID of the tenant the property is attached to.
 // property_id:     The ID of the property to get the details for.
 // 
 // Returns
@@ -20,7 +20,7 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'property_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Property'), 
         'images'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Images'),
         'categories'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Categories'),
@@ -32,10 +32,10 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'propertyrentals', 'private', 'checkAccess');
-    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['business_id'], 'ciniki.propertyrentals.propertyGet'); 
+    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['tnid'], 'ciniki.propertyrentals.propertyGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -44,10 +44,10 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
 
     //
-    // Load the business intl settings
+    // Load the tenant intl settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $args['business_id']);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $args['tnid']);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -126,10 +126,10 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
         $strsql .= "FROM ciniki_propertyrentals ";
         if( isset($args['images']) && $args['images'] == 'yes' ) {
             $strsql .= "LEFT JOIN ciniki_propertyrental_images ON (ciniki_propertyrentals.id = ciniki_propertyrental_images.property_id "
-                . "AND ciniki_propertyrental_images.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_propertyrental_images.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . ") ";
         }
-        $strsql .= "WHERE ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        $strsql .= "WHERE ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_propertyrentals.id = '" . ciniki_core_dbQuote($ciniki, $args['property_id']) . "' "
             . "";
         
@@ -157,7 +157,7 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
             if( isset($property['images']) ) {
                 foreach($property['images'] as $img_id => $img) {
                     if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], $img['image']['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], $img['image']['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -184,11 +184,11 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
         //
         // Get the categories and tags for the post
         //
-        if( ($ciniki['business']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0 ) {
+        if( ($ciniki['tenant']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0 ) {
             $strsql = "SELECT tag_type, tag_name AS lists "
                 . "FROM ciniki_propertyrental_tags "
                 . "WHERE property_id = '" . ciniki_core_dbQuote($ciniki, $args['property_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY tag_type, tag_name "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.propertyrentals', array(
@@ -221,14 +221,14 @@ function ciniki_propertyrentals_propertyGet($ciniki) {
     // Check if all tags should be returned
     //
     $rsp['categories'] = array();
-    if( ($ciniki['business']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0
+    if( ($ciniki['tenant']['modules']['ciniki.propertyrentals']['flags']&0x10) > 0
         && isset($args['categories']) && $args['categories'] == 'yes' 
         ) {
         //
         // Get the available tags
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
-        $rc = ciniki_core_tagsList($ciniki, 'ciniki.propertyrentals', $args['business_id'], 
+        $rc = ciniki_core_tagsList($ciniki, 'ciniki.propertyrentals', $args['tnid'], 
             'ciniki_propertyrental_tags', 10);
         if( $rc['stat'] != 'ok' ) {
             return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.propertyrentals.8', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));

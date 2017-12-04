@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_propertyrentals_web_categories($ciniki, $settings, $business_id, $args) {
+function ciniki_propertyrentals_web_categories($ciniki, $settings, $tnid, $args) {
 
     //
     // Get the list of category names
@@ -18,10 +18,10 @@ function ciniki_propertyrentals_web_categories($ciniki, $settings, $business_id,
     $strsql = "SELECT DISTINCT ciniki_propertyrental_tags.tag_name AS name, "
         . "ciniki_propertyrental_tags.permalink "
         . "FROM ciniki_propertyrental_tags, ciniki_propertyrentals "
-        . "WHERE ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_propertyrental_tags.tag_type = '10' "
         . "AND ciniki_propertyrental_tags.property_id = ciniki_propertyrentals.id "
-        . "AND ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (ciniki_propertyrentals.flags&0x01) = 1 "
         . "ORDER BY tag_name "
         . "";

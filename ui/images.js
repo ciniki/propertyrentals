@@ -38,7 +38,7 @@ function ciniki_propertyrentals_images() {
             return ''; 
         };
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.propertyrentals.propertyImageHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.propertyrentals.propertyImageHistory', 'args':{'tnid':M.curTenantID, 
                 'property_image_id':this.property_image_id, 'field':i}};
         };
         this.edit.addDropImage = function(iid) {
@@ -83,7 +83,7 @@ function ciniki_propertyrentals_images() {
             this.edit.reset();
             this.edit.sections._buttons.buttons.delete.visible = 'yes';
             var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyImageGet', 
-                {'business_id':M.curBusinessID, 'property_image_id':this.edit.property_image_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'property_image_id':this.edit.property_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -106,7 +106,7 @@ function ciniki_propertyrentals_images() {
             var c = this.edit.serializeFormData('no');
             if( c != '' ) {
                 var rsp = M.api.postJSONFormData('ciniki.propertyrentals.propertyImageUpdate', 
-                    {'business_id':M.curBusinessID, 
+                    {'tnid':M.curTenantID, 
                     'property_image_id':this.edit.property_image_id}, c,
                         function(rsp) {
                             if( rsp.stat != 'ok' ) {
@@ -122,7 +122,7 @@ function ciniki_propertyrentals_images() {
         } else {
             var c = this.edit.serializeFormData('yes');
             var rsp = M.api.postJSONFormData('ciniki.propertyrentals.propertyImageAdd', 
-                {'business_id':M.curBusinessID, 'property_id':this.edit.property_id}, c,
+                {'tnid':M.curTenantID, 'property_id':this.edit.property_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -136,7 +136,7 @@ function ciniki_propertyrentals_images() {
 
     this.deleteImage = function() {
         if( confirm('Are you sure you want to delete this image?') ) {
-            var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyImageDelete', {'business_id':M.curBusinessID, 
+            var rsp = M.api.getJSONCb('ciniki.propertyrentals.propertyImageDelete', {'tnid':M.curTenantID, 
                 'property_image_id':this.edit.property_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);

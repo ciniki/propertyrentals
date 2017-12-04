@@ -1,4 +1,4 @@
-Ciniki - Small Business Management Platform
+Ciniki - Multitenant Cloud Platform
 ===========================================
 
 The Property Rentals module stores information about properties for rent.

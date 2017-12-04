@@ -2,14 +2,14 @@
 //
 // Description
 // -----------
-// This method will return the list of propertyrentals for a business.  It is restricted
-// to business owners and sysadmins.
+// This method will return the list of propertyrentals for a tenant.  It is restricted
+// to tenant owners and sysadmins.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to get propertyrentals for.
+// tnid:     The ID of the tenant to get propertyrentals for.
 //
 // Returns
 // -------
@@ -20,7 +20,7 @@ function ciniki_propertyrentals_propertyList($ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'status'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Status'), 
         'tag_type'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Type'), 
         'tag_permalink'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Permalink'), 
@@ -32,10 +32,10 @@ function ciniki_propertyrentals_propertyList($ciniki) {
     $args = $rc['args'];
     
     //  
-    // Check access to business_id as owner, or sys admin. 
+    // Check access to tnid as owner, or sys admin. 
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'propertyrentals', 'private', 'checkAccess');
-    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['business_id'], 'ciniki.propertyrentals.propertyList');
+    $rc = ciniki_propertyrentals_checkAccess($ciniki, $args['tnid'], 'ciniki.propertyrentals.propertyList');
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -62,9 +62,9 @@ function ciniki_propertyrentals_propertyList($ciniki) {
             . "FROM ciniki_propertyrental_tags "
             . "LEFT JOIN ciniki_propertyrentals ON ("
                 . "ciniki_propertyrental_tags.property_id = ciniki_propertyrentals.id "
-                . "AND ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . ") "
-            . "WHERE ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_propertyrental_tags.tag_type = '10' "
             . "GROUP BY ciniki_propertyrental_tags.permalink "
             . "ORDER BY ciniki_propertyrental_tags.tag_name COLLATE latin1_general_cs "
@@ -95,10 +95,10 @@ function ciniki_propertyrentals_propertyList($ciniki) {
             . "FROM ciniki_propertyrentals "
             . "LEFT JOIN ciniki_propertyrental_tags ON ("
                 . "ciniki_propertyrentals.id = ciniki_propertyrental_tags.property_id "
-                . "AND ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND ciniki_propertyrental_tags.tag_type = '10' "
                 . ") "
-            . "WHERE ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ISNULL(tag_name) "
             . "GROUP BY tag_name "
             . "";
@@ -133,11 +133,11 @@ function ciniki_propertyrentals_propertyList($ciniki) {
             . "ciniki_propertyrentals.synopsis, "
             . "ciniki_propertyrentals.description, "
             . "FROM ciniki_propertyrental_tags, ciniki_propertyrentals "
-            . "WHERE ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_propertyrental_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_propertyrental_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag_permalink']) . "' "
             . "AND ciniki_propertyrental_tags.property_id = ciniki_propertyrentals.id "
-            . "AND ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "";
         if( isset($args['status']) && $args['status'] != '' ) {
             $strsql .= "AND ciniki_propertyrentals.status = '" . ciniki_core_dbQuote($ciniki, $args['status']) . "' ";
@@ -157,9 +157,9 @@ function ciniki_propertyrentals_propertyList($ciniki) {
             . "LEFT JOIN ciniki_propertyrental_tags ON ("
                 . "ciniki_propertyrentals.id = ciniki_propertyrental_tags.property_id "
                 . "AND ciniki_propertyrental_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
-                . "AND ciniki_propertyrental_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_propertyrental_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . ") "
-            . "WHERE ciniki_propertyrentals.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_propertyrentals.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "";
         if( isset($args['status']) && $args['status'] != '' ) {
             $strsql .= "AND ciniki_propertyrentals.status = '" . ciniki_core_dbQuote($ciniki, $args['status']) . "' ";
@@ -174,7 +174,7 @@ function ciniki_propertyrentals_propertyList($ciniki) {
             . "ciniki_propertyrentals.synopsis, "
             . "ciniki_propertyrentals.description "
             . "FROM ciniki_propertyrentals "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "";
         if( isset($args['status']) && $args['status'] != '' ) {
             $strsql .= "AND ciniki_propertyrentals.status = '" . ciniki_core_dbQuote($ciniki, $args['status']) . "' ";
