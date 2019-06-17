@@ -41,7 +41,7 @@ function ciniki_propertyrentals_web_properties($ciniki, $settings, $tnid, $args)
     }
     $strsql .= "ORDER BY ciniki_propertyrentals.title ";
     if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 && is_int($args['limit']) ) {
-        $strsql .= "LIMIT " . $args['limit'] . " ";
+        $strsql .= "LIMIT " . intval($args['limit']) . " ";
     }
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
