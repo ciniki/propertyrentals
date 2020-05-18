@@ -197,7 +197,7 @@ function ciniki_propertyrentals_main() {
                     M.ciniki_propertyrentals_main.edit.setFieldValue('longitude', results[0].geometry.location.lng());
                     M.stopLoad();
                 } else {
-                    alert('We were unable to lookup your latitude/longitude, please check your address: ' + status);
+                    M.alert('We were unable to lookup your latitude/longitude, please check your address: ' + status);
                     M.stopLoad();
                 }
             }); 
@@ -228,7 +228,7 @@ function ciniki_propertyrentals_main() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_propertyrentals_main', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 
@@ -368,7 +368,7 @@ function ciniki_propertyrentals_main() {
     };
 
     this.removeProperty = function() {
-        if( confirm("Are you sure you want to remove '" + this.property.data.name + "' as an property ?") ) {
+        M.confirm("Are you sure you want to remove '" + this.property.data.name + "' as an property ?",null,function() {
             M.api.getJSONCb('ciniki.propertyrentals.propertyDelete', 
                 {'tnid':M.curTenantID, 'property_id':M.ciniki_propertyrentals_main.property.property_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
@@ -377,6 +377,6 @@ function ciniki_propertyrentals_main() {
                     }
                     M.ciniki_propertyrentals_main.property.close();
                 });
-        }
+        });
     }
 };
